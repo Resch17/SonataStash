@@ -1,0 +1,6 @@
+@SonataStash_HostAddress = http://localhost:5262
+
+GET {{SonataStash_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
