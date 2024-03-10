@@ -9,6 +9,13 @@ namespace SonataStash
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowMyOrigin",
+                    builder => builder.AllowAnyOrigin().AllowAnyMethod()
+                        .WithHeaders("Authorization", "Content-Type", "Accept"));
+            });
+
             // Add services to the container.
             builder.Services.AddTransient<IComposerRepository, ComposerRepository>();
             builder.Services.AddTransient<IBookRepository, BookRepository>();
@@ -32,6 +39,7 @@ namespace SonataStash
 
             app.UseHttpsRedirection();
 
+            app.UseCors("AllowMyOrigin");
             app.UseAuthorization();
 
 

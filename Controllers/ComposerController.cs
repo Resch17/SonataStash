@@ -19,7 +19,8 @@ public class ComposerController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetComposersAsync()
     {
-        return Ok(await _composerRepository.GetComposersAsync());
+        var composers = await _composerRepository.GetComposersAsync();
+        return Ok(composers.OrderBy(x => x.LastName));
     }
 
     [HttpPost]
