@@ -26,8 +26,11 @@ public class ComposerRepository : BaseRepository, IComposerRepository
     public async Task<IEnumerable<Composer>> GetComposersAsync()
     {
         const string sql = """
-                           SELECT composer_id, first_name, last_name, birth_year, death_year, nationality
-                           FROM composers;
+                           SELECT c.composer_id, c.first_name, c.last_name, c.birth_year, c.death_year, c.nationality,
+                                  (SELECT COUNT(*) FROM pieces p
+                                    left join composers subc on subc.composer_id = p.piece_composer_id
+                                    where p.piece_composer_id = c.composer_id) as piece_count
+                           FROM composers c;
                            """;
 
         using (var db = Connection)

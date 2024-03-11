@@ -6,6 +6,7 @@ export interface Composer {
   birthYear?: number | undefined;
   deathYear?: number | undefined;
   nationality?: string | undefined;
+  pieceCount?: number | undefined;
 }
 
 export interface NewComposer {

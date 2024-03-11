@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import { ComposerForm } from './components/ComposerForm';
-import { Composer } from './types';
+import { Composer, Piece } from './types';
 import { getComposers } from './services/composerService';
+import { getPiecesByComposer } from './services/pieceService';
 import { ComposerList } from './components/ComposerList';
+import { ComposerPieceList } from './components/ComposerPieceList';
 
 function App() {
   type Tab = 'composer' | 'book' | 'piece';
   const [activeTab, setActiveTab] = useState<Tab>('composer');
   const [composers, setComposers] = useState<Composer[]>([]);
+
+  const [selectedComposer, setSelectedComposer] = useState<
+    Composer | undefined
+  >();
+  const [composerPieces, setComposerPieces] = useState<Piece[]>([]);
 
   const loadComposers = async () => {
     const data = await getComposers();
@@ -22,14 +29,25 @@ function App() {
 
   const tabClass = (tab: Tab) => {
     let baseClass =
-      'w-full pt-8 pb-3 cursor-pointer border-x-2 border-b-2 border-black text-center';
+      'w-full py-4 text-xl roboto-black cursor-pointer border-x-2 border-b-2 border-black text-center';
     if (activeTab === tab) baseClass += ' bg-blue-200';
     return baseClass;
+  };
+
+  const loadPieceByComposer = async () => {
+    if (selectedComposer) {
+      const data = await getPiecesByComposer(selectedComposer.composerId);
+      setComposerPieces(data);
+    }
   };
 
   useEffect(() => {
     loadComposers();
   }, []);
+
+  useEffect(() => {
+    loadPieceByComposer();
+  }, [selectedComposer]);
 
   return (
     <main className="w-full">
@@ -52,8 +70,15 @@ function App() {
       </div>
       {activeTab === 'composer' && (
         <div className="flex">
-          <ComposerForm onSuccessCallback={onComposerSuccess} />
-          <ComposerList composers={composers} />
+          {!selectedComposer && (
+            <ComposerForm onSuccessCallback={onComposerSuccess} />
+          )}
+          <ComposerList
+            composers={composers}
+            selectedComposer={selectedComposer}
+            setSelectedComposer={setSelectedComposer}
+          />
+          {selectedComposer && <ComposerPieceList pieces={composerPieces} />}
         </div>
       )}
     </main>

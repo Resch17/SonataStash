@@ -70,7 +70,7 @@ export const ComposerForm = ({ onSuccessCallback }: ComposerFormProps) => {
       <AInput id="newComposerDeathYear" type="number" labelText="Death Year" />
       <AInput id="newComposerNationality" labelText="Nationality" />
       <button className="btn mt-4" onClick={onSubmitClick}>
-        Submit
+        Submit Composer
       </button>
     </section>
   );

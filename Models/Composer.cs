@@ -8,4 +8,6 @@ public class Composer
     public int? BirthYear { get; set; }
     public int? DeathYear { get; set; }
     public string? Nationality { get; set; }
+    // calculated, not stored
+    public int? PieceCount { get; init; }
 }
