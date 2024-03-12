@@ -1,4 +1,5 @@
 import { Composer } from '../types';
+import { composerNameDisplay } from '../utilities';
 
 interface ComposerListProps {
   composers: Composer[];
@@ -12,26 +13,6 @@ export const ComposerList = ({
   selectedComposer,
   setSelectedComposer,
 }: ComposerListProps) => {
-  const composerNameDisplay = (composer: Composer) => {
-    let name = '';
-    if (!composer.firstName) {
-      name = composer.lastName;
-    } else {
-      name = composer.firstName + ' ' + composer.lastName;
-    }
-    if (composer.nationality) {
-      name += ` - ${composer.nationality}`;
-    }
-    if (composer.pieceCount && composer.pieceCount > 0) {
-      if (composer.pieceCount == 1) {
-        name += ' - 1 piece';
-      } else {
-        name += ` - ${composer.pieceCount} pieces`;
-      }
-    }
-    return name;
-  };
-
   const composerListItemClass = (composer: Composer) => {
     let baseClass = 'cursor-pointer merriweather-regular text-xl';
     if (selectedComposer?.composerId === composer.composerId) {

@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import { ComposerForm } from './components/ComposerForm';
-import { Composer, Piece } from './types';
+import { Book, Composer, Piece } from './types';
 import { getComposers } from './services/composerService';
 import { getPiecesByComposer } from './services/pieceService';
 import { ComposerList } from './components/ComposerList';
 import { ComposerPieceList } from './components/ComposerPieceList';
+import { BookList } from './components/BookList';
+import { getAllBooks } from './services/bookService';
+import { BookForm } from './components/BookForm';
+import { PieceMultiForm } from './components/PieceMultiForm';
 
 function App() {
   type Tab = 'composer' | 'book' | 'piece';
   const [activeTab, setActiveTab] = useState<Tab>('composer');
   const [composers, setComposers] = useState<Composer[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
 
   const [selectedComposer, setSelectedComposer] = useState<
     Composer | undefined
@@ -20,6 +25,11 @@ function App() {
   const loadComposers = async () => {
     const data = await getComposers();
     setComposers(data);
+  };
+
+  const loadBooks = async () => {
+    const data = await getAllBooks();
+    setBooks(data);
   };
 
   const onComposerSuccess = () => {
@@ -43,6 +53,7 @@ function App() {
 
   useEffect(() => {
     loadComposers();
+    loadBooks();
   }, []);
 
   useEffect(() => {
@@ -79,6 +90,17 @@ function App() {
             setSelectedComposer={setSelectedComposer}
           />
           {selectedComposer && <ComposerPieceList pieces={composerPieces} />}
+        </div>
+      )}
+      {activeTab === 'book' && (
+        <div className="flex">
+          <BookForm composers={composers} />
+          <BookList books={books} />
+        </div>
+      )}
+      {activeTab === 'piece' && (
+        <div className="flex">
+          <PieceMultiForm composers={composers}  books={books} />
         </div>
       )}
     </main>
